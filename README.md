@@ -2,7 +2,7 @@
 
 ![Sveltekit Auth User Interface](https://miro.medium.com/v2/resize:fit:4772/1*v-oJRLXc299bFOzDS-fnyA.png)
 
-This is a Sveltekit Auth Starter Project. An example website is currently deployed [here](https://sveltekit-auth.uv-ray.com/). It is an open source auth starter project utilizing [Lucia](https://lucia-auth.com/) for authentication, [Skeleton](https://www.skeleton.dev) for ui elements, [Prisma](https://www.prisma.io) for database connectivity and type safety and [Sveltekit](https://kit.svelte.dev) for the javascript framework. I also used [Zod](https://zod.dev) and [Superforms](https://superforms.vercel.app) to handle form validation and management. It has email verification, password reset, and will send an email if the user changes their email address to re-verify it. It is released as open source under an MIT license.
+This is a Sveltekit Auth Starter Project. An example website is currently deployed [here](https://sveltekit-auth.uv-ray.com/). It is an open source auth starter project utilizing [Lucia](https://lucia-auth.com/) for authentication, [Skeleton](https://www.skeleton.dev) for ui elements, [Lucide](https://lucide.dev) for icons, [Prisma](https://www.prisma.io) for database connectivity and type safety, [inlang](https://inlang.com) for language translation and [Sveltekit](https://kit.svelte.dev) for the javascript framework. I also used [Zod](https://zod.dev) and [Superforms](https://superforms.vercel.app) to handle form validation and management. It has email verification, password reset, and will send an email if the user changes their email address to re-verify it. It is released as open source under an MIT license.
 
 While creating this project, I made use of several great videos and tutorials from [Huntabyte](https://www.youtube.com/@huntabyte) and [Joy of Code](https://www.youtube.com/@JoyofCodeDev). Both have great tutorials for all things related to Sveltekit.
 
@@ -136,8 +136,8 @@ This page confirms the email address by verifying the token the user received in
 
 This resends the verify email token email in case the user didn’t receive or lost the email.
 
-## /protected
+## /(protected)
 
-This area is only allowed to be accessed when a user is logged in.
+This route group is only allowed to be accessed when a user is logged in.
 
 Hopefully you may find some of this code useful for your own project. Please feel free to use it in any project.
