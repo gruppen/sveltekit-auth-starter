@@ -15,6 +15,7 @@ declare global {
 			email: string;
 			firstName: string;
 			lastName: string;
+			displayName: string;
 			role: string;
 			verified: boolean;
 			receiveEmail: boolean;

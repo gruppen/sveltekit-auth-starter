@@ -27,6 +27,26 @@
 				<span><Lock /></span><span class="flex-auto">Protected</span></a
 			>
 		</li>
+
+		<li>
+			<a href="/elements" on:click={drawerClose}>
+				<span><Lock /></span><span class="flex-auto">Elements</span></a
+			>
+		</li>
+
+		<li>
+			<a href="/documents" on:click={drawerClose}>
+				<span><Lock /></span><span class="flex-auto">Documents</span></a
+			>
+		</li>
+
+		{#if user?.role === 'ADMIN'}
+			<li>
+				<a href="/list-users" on:click={drawerClose}>
+					<span><Lock /></span><span class="flex-auto">list users</span></a
+				>
+			</li>
+		{/if}
 		{#if user}
 			<li>
 				<a href="/auth/profile" on:click={drawerClose}>

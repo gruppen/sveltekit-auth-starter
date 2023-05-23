@@ -10,6 +10,7 @@
 	const signUpSchema = userSchema.pick({
 		firstName: true,
 		lastName: true,
+		displayName: true,
 		email: true,
 		password: true
 	});
@@ -17,7 +18,7 @@
 	const { form, errors, enhance, delayed } = superForm(data.form, {
 		taintedMessage: null,
 		validators: signUpSchema,
-		delayMs: 0
+		delayMs: 400
 	});
 
 	const conicStops: ConicStop[] = [
@@ -66,6 +67,25 @@
 			/>
 			{#if $errors.lastName}
 				<small>{$errors.lastName}</small>
+			{/if}
+		</label>
+	</div>
+	<div class="mt-6">
+		<label class="label">
+			<span class="">Display Name</span>
+			<input
+				id="displayName"
+				name="displayName"
+				type="text"
+				placeholder="Display Name"
+				autocomplete="nickname"
+				data-invalid={$errors.displayName}
+				bind:value={$form.displayName}
+				class="input"
+				class:input-error={$errors.displayName}
+			/>
+			{#if $errors.displayName}
+				<small>{$errors.displayName}</small>
 			{/if}
 		</label>
 	</div>

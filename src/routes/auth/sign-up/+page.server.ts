@@ -1,12 +1,15 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
+import { ENABLE_CONFIRMATION_EMAIL } from '$env/static/private';
 import { auth } from '$lib/server/lucia';
 import { userSchema } from '$lib/config/zod-schemas';
 import { sendVerificationEmail } from '$lib/config/email-messages';
+import prisma from '$lib/config/prisma';
 
 const signUpSchema = userSchema.pick({
 	firstName: true,
 	lastName: true,
+	displayName: true,
 	email: true,
 	password: true,
 	terms: true
@@ -47,6 +50,7 @@ export const actions = {
 					email: form.data.email,
 					firstName: form.data.firstName,
 					lastName: form.data.lastName,
+					displayName: form.data.displayName,
 					role: 'USER',
 					verified: false,
 					receiveEmail: true,
@@ -54,7 +58,21 @@ export const actions = {
 				}
 			});
 
-			await sendVerificationEmail(form.data.email, token);
+			if (ENABLE_CONFIRMATION_EMAIL == 'true') {
+				console.log('sending email');
+				await sendVerificationEmail(form.data.email, token);
+			} else {
+				console.log('email verification disabled');
+				await prisma.authUser.update({
+					where: {
+						token: token
+					},
+					data: {
+						verified: true
+					}
+				});
+			}
+			//await sendVerificationEmail(form.data.email, token);
 			const session = await auth.createSession(user.userId);
 			event.locals.auth.setSession(session);
 		} catch (e) {

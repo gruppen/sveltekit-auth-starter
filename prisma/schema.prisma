@@ -1,27 +1,29 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 datasource db {
-    provider = "postgresql"
-    url      = env("POSTGRES_PRISMA_URL")
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
 }
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model AuthUser {
-    id            String        @id @unique
-    email         String        @unique
-    firstName     String
-    lastName      String
-    role          Role          @default(USER)
-    verified      Boolean       @default(false)
-    receiveEmail  Boolean       @default(true)
-    token         String?    @unique
-    createdAt      DateTime          @default(now()) @db.Timestamp(6)
-    updatedAt       DateTime        @updatedAt @db.Timestamp(6)
-    auth_session  AuthSession[]
-    auth_key      AuthKey[]
+  id           String        @id @unique
+  email        String        @unique
+  firstName    String
+  lastName     String
+  displayName  String        @default("")
+  role         Role          @default(USER)
+  verified     Boolean       @default(false)
+  receiveEmail Boolean       @default(true)
+  token        String?       @unique
+  createdAt    DateTime      @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime      @updatedAt @db.Timestamp(6)
+  auth_session AuthSession[]
+  auth_key     AuthKey[]
+  Document     Document[]
 
   @@map("auth_user")
 }
@@ -53,4 +55,25 @@ enum Role {
   USER
   PREMIUM
   ADMIN
+}
+
+model Document {
+  id        String        @id @unique
+  name      String
+  content   String?
+  path      String?
+  docType   documentType?
+  user_id   String
+  auth_user AuthUser      @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  createdAt DateTime      @default(now()) @db.Timestamp(6)
+  updatedAt DateTime      @updatedAt @db.Timestamp(6)
+
+  @@index([user_id])
+  @@map("document")
+}
+
+enum documentType {
+  INVOICE
+  CREDITNOTE
+  DEBITNOTE
 }

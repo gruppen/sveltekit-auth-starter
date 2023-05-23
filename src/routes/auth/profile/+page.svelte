@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms/client';
-	//import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+	// import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import { userSchema } from '$lib/config/zod-schemas';
 	import { ConicGradient } from '@skeletonlabs/skeleton';
 	import type { ConicStop } from '@skeletonlabs/skeleton';
@@ -10,6 +10,7 @@
 	const signUpSchema = userSchema.pick({
 		firstName: true,
 		lastName: true,
+		displayName: true,
 		email: true
 	});
 
@@ -26,7 +27,7 @@
 </script>
 
 <form method="POST" use:enhance>
-	<!--<SuperDebug data={$form} />-->
+	<!-- <SuperDebug data={$form} /> -->
 	<h3>Profile</h3>
 	<hr class="!border-t-2 mt-2 mb-6" />
 	{#if $message}
@@ -86,6 +87,26 @@
 			{/if}
 		</label>
 	</div>
+	<div class="mt-6">
+		<label class="label">
+			<span class="">Display Name</span>
+			<input
+				id="displayName"
+				name="displayName"
+				type="text"
+				placeholder="Display Name"
+				autocomplete="nickname"
+				data-invalid={$errors.displayName}
+				bind:value={$form.displayName}
+				class="input"
+				class:input-error={$errors.displayName}
+			/>
+			{#if $errors.displayName}
+				<small>{$errors.displayName}</small>
+			{/if}
+		</label>
+	</div>
+
 	<div class="mt-6">
 		<label class="label">
 			<span class="">Email address</span>
