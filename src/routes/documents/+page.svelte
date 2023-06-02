@@ -12,6 +12,8 @@
 	import PlaceholderTable from './placeholderTable.svelte';
 	import { goto } from '$app/navigation';
 
+	import DeletingSpinner from '$lib/components/deletingSpinner.svelte';
+
 	let { documents } = data;
 
 	let loaded = false;
@@ -56,13 +58,28 @@
 	// };
 
 	function docModalOpen(doc: any): void {
+		const c: ModalComponent = { ref: DeletingSpinner };
+
 		modalStore.trigger({
+			type: 'component',
 			title: `Remove document ${doc.name}?`,
-			type: 'confirm',
+			body: ' remove doc?',
+			component: c,
 			meta: { doc },
 
 			response(r) {}
 		});
+	}
+
+	function modalComponentList(): void {
+		const modal: ModalSettings = {
+			type: 'component',
+			component: 'exampleList',
+			title: 'Custom List Component',
+			body: 'Make your selection then press submit.',
+			response: (r: any) => console.log('response:', r)
+		};
+		modalStore.trigger(modal);
 	}
 </script>
 

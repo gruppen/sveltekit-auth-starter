@@ -12,6 +12,10 @@ export const load = async (event) => {
 	const session = await event.locals.auth.validate();
 	if (session) throw redirect(302, '/protected');
 	const form = await superValidate(event, signInSchema);
+	form.data = {
+		email: 'admin@localhost.com',
+		password: '123456'
+	};
 	return {
 		form
 	};
