@@ -1,16 +1,31 @@
 <script lang="ts">
 	import { ListBox, ListBoxItem, modalStore } from '@skeletonlabs/skeleton';
+	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '$app/forms';
+	import type { ActionData, PageData } from './$types';
 
+	export let data: PageData;
+	export let form: ActionData;
+
+	const submit: SubmitFunction = async () => {
+		// do something before the form is submitted
+
+		return async ({ update }) => {
+			// do something after the form is submitted
+
+			await update();
+		};
+	};
 	// Props
 	/** Exposes parent props to this component. */
 	export let parent: any;
 
-	// Local
-	let flavor = 'chocolate';
+	export let docName = $modalStore[0].meta.doc.name ?? '';
+	export let docType = $modalStore[0].meta.doc.docType ?? '';
 
 	// Handle Form Submission
 	function onFormSubmit(): void {
-		if ($modalStore[0].response) $modalStore[0].response(flavor);
+		if ($modalStore[0].response) $modalStore[0].response(docName, docType);
 		modalStore.close();
 	}
 
@@ -22,18 +37,39 @@
 <!-- @component This example creates a simple form modal. -->
 
 {#if $modalStore[0]}
-	<div class="modal-example-form {cBase}">
-		<header class={cHeader}>{$modalStore[0].title ?? '(title missing)'}</header>
-		<article>{$modalStore[0].body ?? '(body missing)'}</article>
+	<form action="?/" use:enhance={submit}>
+		<div class="modal-example-form {cBase}">
+			<header class={cHeader}>{$modalStore[0].title ?? '(title missing)'}</header>
+			<article>{$modalStore[0].body ?? '(body missing)'}</article>
 
-		<pre><code>{JSON.stringify($modalStore[0].meta, null, 2)}</code></pre>
+			<label class="label">
+				<span>Name</span>
+				<input
+					class="input"
+					title="name"
+					type="text"
+					placeholder="input text"
+					name="name"
+					bind:value={docName}
+				/>
+			</label>
 
-		<!-- prettier-ignore -->
-		<footer class="modal-footer {parent.regionFooter}">
+			<label class="label" for="docType"
+				><span>Document Type</span>
+				<select name="docType" id="docType" class="select" bind:value={docType}>
+					<option value="INVOICE">Invoice</option>
+					<option value="CREDITNOTE">Credit Note</option>
+					<option value="DEBITNOTE">Debit Note</option>
+				</select>
+			</label>
+
+			<!-- prettier-ignore -->
+			<footer class="modal-footer {parent.regionFooter}">
         <button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>{parent.buttonTextCancel}</button>
-        <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>Yes,remove</button>
-    </footer>
-	</div>
+        <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>Select Flavors</button>
+			</footer>
+		</div>
+	</form>
 {/if}
 
 <style>

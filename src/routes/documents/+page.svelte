@@ -1,11 +1,13 @@
 <script lang="ts">
+	import DeleteDocumentModal from './../../lib/components/deleteDocumentModal.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import {
 		Paginator,
 		type TableSource,
 		modalStore,
-		type ModalSettings
+		type ModalSettings,
+		type ModalComponent
 	} from '@skeletonlabs/skeleton';
 	export let data: PageData;
 
@@ -13,6 +15,7 @@
 	import { goto } from '$app/navigation';
 
 	import DeletingSpinner from '$lib/components/deletingSpinner.svelte';
+	import EditDocumentModal from '$lib/components/EditDocumentModal.svelte';
 
 	let { documents } = data;
 
@@ -57,29 +60,37 @@
 	// 	}
 	// };
 
+	let responseFromDeleteModal: any = null;
+
 	function docModalOpen(doc: any): void {
 		const c: ModalComponent = { ref: DeletingSpinner };
 
 		modalStore.trigger({
 			type: 'component',
-			title: `Remove document ${doc.name}?`,
-			body: ' remove doc?',
+			title: `Are you sure?`,
+			body: `Are you sure you want to remove document ${doc.name}? This action cannot be undone.`,
 			component: c,
 			meta: { doc },
 
-			response(r) {}
+			response(r) {
+				console.log('response', r);
+			}
 		});
 	}
+	function editDocModalOpen(doc: any): void {
+		const c: ModalComponent = { ref: EditDocumentModal };
 
-	function modalComponentList(): void {
-		const modal: ModalSettings = {
+		modalStore.trigger({
 			type: 'component',
-			component: 'exampleList',
-			title: 'Custom List Component',
-			body: 'Make your selection then press submit.',
-			response: (r: any) => console.log('response:', r)
-		};
-		modalStore.trigger(modal);
+			title: `Edit document ${doc.name}?`,
+			body: ' Edit doc:',
+			component: c,
+			meta: { doc },
+
+			response(r) {
+				console.log('response', r);
+			}
+		});
 	}
 </script>
 
@@ -87,6 +98,10 @@
 	<div class="card p-6 pb-8 pt-8">
 		<div class="flex flex-row justify-start items-center mb-4">
 			<h2>Documents</h2>
+			<button class="btn btn-sm variant-filled-primary ml-4">New</button>
+			<div class="ml-4 w-full">
+				<pre>Response from DeleteDocumentModal: {$responseFromDeleteModal} </pre>
+			</div>
 		</div>
 
 		<hr class="!border-t-2 mt-2 mb-6" />
@@ -110,7 +125,12 @@
 							<td class="table-cell-fit">{doc.docType}</td>
 							<td class="table-cell-fit">{doc.auth_user.displayName}</td>
 							<td class="table-cell-fit">{doc.auth_user.role}</td>
-							<td class="table-cell-fit "><button on:click={docModalOpen(doc)} class="btn btn-sm variant-filled-error">delete</button></td>
+							<td class="table-cell-fit ">
+								<div class="flex gap-4">
+									<button on:click={docModalOpen(doc)} class="btn btn-sm variant-filled-error">delete</button>
+									<button on:click={editDocModalOpen(doc)} class="btn btn-sm variant-filled-tertiary">edit</button>
+								</div>
+						</td>
 						</tr>
 					{/each}
 				</tbody>

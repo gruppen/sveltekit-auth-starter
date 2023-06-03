@@ -116,9 +116,6 @@
     "pnpm-lock.yaml": true,
     "postcss.config.cjs": true,
     "sample.env": true,
-    "svelte.config.js": true,
-    "tailwind.config.cjs": true,
-    "tsconfig.json": true,
-    "vite.config.ts": true
+    "tailwind.config.cjs": true
   }
 }
